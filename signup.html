@@ -328,6 +328,12 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" required minlength="6">
+                    <div class="error-message" id="confirmPassword-error"></div>
+                </div>
+                
+                <div class="form-group">
                     <label for="street" class="form-label">Street Address</label>
                     <div class="address-input">
                         <input type="text" id="street" name="street" class="form-input" 
@@ -469,7 +475,7 @@
         
         // Real-time form validation
         function checkFormCompletion() {
-            const requiredFields = ['firstName', 'lastName', 'email', 'password', 'street', 'city', 'state', 'zipCode']
+            const requiredFields = ['firstName', 'lastName', 'email', 'password', 'confirmPassword', 'street', 'city', 'state', 'zipCode']
             const submitBtn = document.getElementById('submit-btn')
             
             let allFieldsFilled = true
@@ -481,12 +487,14 @@
                 }
             })
             
-            // Also check if email is valid and password is long enough
+            // Also check if email is valid, password is long enough, and passwords match
             const email = document.getElementById('email').value
             const password = document.getElementById('password').value
+            const confirmPassword = document.getElementById('confirmPassword').value
             const zipCode = document.getElementById('zipCode').value
             
-            if (allFieldsFilled && isValidEmail(email) && password.length >= 6 && /^\d{5}$/.test(zipCode)) {
+            if (allFieldsFilled && isValidEmail(email) && password.length >= 6 && 
+                password === confirmPassword && /^\d{5}$/.test(zipCode)) {
                 submitBtn.disabled = false
             } else {
                 submitBtn.disabled = true
@@ -495,7 +503,7 @@
         
         // Add event listeners to all form fields
         function setupFormValidation() {
-            const allFields = ['firstName', 'lastName', 'email', 'password', 'street', 'unit', 'city', 'state', 'zipCode']
+            const allFields = ['firstName', 'lastName', 'email', 'password', 'confirmPassword', 'street', 'unit', 'city', 'state', 'zipCode']
             
             allFields.forEach(fieldId => {
                 const field = document.getElementById(fieldId)
@@ -517,7 +525,7 @@
             checkFormCompletion()
         }
         function validateForm() {
-            const fields = ['firstName', 'lastName', 'email', 'password', 'street', 'city', 'state', 'zipCode']
+            const fields = ['firstName', 'lastName', 'email', 'password', 'confirmPassword', 'street', 'city', 'state', 'zipCode']
             let isValid = true
             
             fields.forEach(field => {
@@ -537,6 +545,9 @@
                     isValid = false
                 } else if (field === 'password' && input.value.length < 6) {
                     showFieldError(field, 'Password must be at least 6 characters')
+                    isValid = false
+                } else if (field === 'confirmPassword' && input.value !== document.getElementById('password').value) {
+                    showFieldError(field, 'Passwords do not match')
                     isValid = false
                 } else if (field === 'zipCode' && !/^\d{5}$/.test(input.value)) {
                     showFieldError(field, 'Please enter a valid 5-digit zip code')
