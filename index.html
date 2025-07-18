@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoodNeybr Task Manager</title>
+    <title>GoodNeybr - Boston Home Services</title>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -14,30 +14,40 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #2B4A9C 0%, #1E3A8A 100%);
-            min-height: 100vh;
-            padding: 20px;
+            line-height: 1.6;
+            color: #333;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(43, 74, 156, 0.2);
-        }
-
+        /* Header Styles */
         .header {
-            text-align: center;
-            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 40%, #60A5FA 100%);
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 15px;
-            display: block;
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
         .logo-svg {
@@ -45,93 +55,275 @@
             height: 100%;
         }
 
-        h1 {
-            color: #2B4A9C;
-            font-size: 2.5em;
-            font-weight: 700;
-            margin: 0;
-        }
-
         .brand-name {
-            color: #2B4A9C;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
         }
 
         .brand-name .yellow {
-            color: #FFD700;
+            color: #F59E0B;
         }
 
-        .auth-container {
-            text-align: center;
-            padding: 40px 20px;
+        .brand-slogan {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .auth-form {
-            display: inline-block;
-            text-align: left;
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            border: 2px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .auth-input {
+            padding: 12px 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            background: rgba(255,255,255,0.9);
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            width: 160px;
+            transition: all 0.3s ease;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #2B4A9C;
+        .auth-input::placeholder {
+            color: #6B7280;
         }
 
-        input[type="email"], input[type="password"], input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #E5E7EB;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
+        .auth-input:focus {
             outline: none;
-            border-color: #2B4A9C;
-            box-shadow: 0 0 0 3px rgba(43, 74, 156, 0.1);
+            border-color: #F59E0B;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
         }
 
         .btn {
-            background: linear-gradient(45deg, #2B4A9C, #1E3A8A);
-            color: white;
+            background: #FFD700;
+            color: #1E3A8A;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-right: 10px;
-            box-shadow: 0 2px 4px rgba(43, 74, 156, 0.2);
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(43, 74, 156, 0.3);
+            box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+            background: #F59E0B;
         }
 
         .btn-secondary {
-            background: linear-gradient(45deg, #FFD700, #F59E0B);
-            color: #2B4A9C;
+            background: white;
+            color: #1E3A8A;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
         }
 
         .btn-secondary:hover {
-            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+            background: rgba(255,255,255,0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 255, 255, 0.3);
         }
 
-        .btn-danger {
-            background: linear-gradient(45deg, #DC2626, #B91C1C);
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
             color: white;
+        }
+
+        .realtime-status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+            animation: pulse 2s infinite;
+        }
+
+        .realtime-status.disconnected {
+            background: #DC2626;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            min-height: calc(100vh - 90px);
+        }
+
+        .hero-section {
+            /* Using your renamed Supabase image */
+            background-color: #2563EB;
+            background-image: url('https://lqlwcvufmzewjjtzhwip.supabase.co/storage/v1/object/public/images/backbay.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            min-height: 500px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #FFD700, #F59E0B);
+            color: #2B4A9C;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(255, 215, 0, 0.4);
+        }
+
+        .content-section {
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .what-we-do::before {
+            background-image: url('https://images.unsplash.com/photo-1571689945159-8542dfb6ae13?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .who-we-are::before {
+            background-image: url('https://images.unsplash.com/photo-1573089857726-b1a10b3b89e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2B4A9C;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .section-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .who-we-are {
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+        }
+
+        .who-we-are .content-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .founders-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            font-size: 1.1rem;
+            text-align: center;
+            border: 2px solid #E5E7EB;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, #2B4A9C 0%, #1E3A8A 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .contact-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .contact-email {
+            font-size: 1.3rem;
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .contact-email:hover {
+            text-decoration: underline;
+        }
+
+        /* Task Management Styles */
+        .task-manager {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(43, 74, 156, 0.1);
         }
 
         .task-input {
@@ -142,10 +334,14 @@
 
         .task-input input {
             flex: 1;
+            padding: 12px;
             border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 16px;
         }
 
         .task-input input:focus {
+            outline: none;
             border-color: #2B4A9C;
             box-shadow: 0 0 0 3px rgba(43, 74, 156, 0.1);
         }
@@ -219,23 +415,6 @@
             box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
         }
 
-        .user-info {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border: 2px solid #FFD700;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-info span {
-            color: #2B4A9C;
-            font-weight: 600;
-        }
-
         .loading {
             text-align: center;
             padding: 20px;
@@ -262,20 +441,7 @@
             margin: 10px 0;
         }
 
-        .realtime-status {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #10B981;
-            margin-left: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        .realtime-status.disconnected {
-            background: #DC2626;
-        }
-
+        /* Animations */
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -312,80 +478,127 @@
             }
         }
 
-        .task.updated-task.completed {
-            animation: highlight-completed 1s ease-out;
-        }
-
-        @keyframes highlight-completed {
-            0% { 
-                background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-                border-color: #FFD700;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
             }
-            100% { 
-                background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
-                border-color: #10B981;
-            }
-        }
 
-        .auth-form h3 {
-            color: #2B4A9C;
-            margin-bottom: 20px;
-            text-align: center;
+            .auth-form {
+                flex-wrap: wrap;
+            }
+
+            .auth-input {
+                width: 140px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .who-we-are .content-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .founders-image {
+                height: 200px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <svg class="logo-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-                    <!-- House outline -->
-                    <path d="M80 200 L200 80 L320 200 L320 340 L80 340 Z" 
-                          fill="none" 
-                          stroke="#2B4A9C" 
-                          stroke-width="20" 
-                          stroke-linejoin="round"/>
-                    
-                    <!-- Heart shape -->
-                    <path d="M200 300 C 170 270, 140 240, 140 210 C 140 190, 155 175, 175 175 C 185 175, 195 180, 200 190 C 205 180, 215 175, 225 175 C 245 175, 260 190, 260 210 C 260 240, 230 270, 200 300 Z" 
-                          fill="#FFD700" 
-                          stroke="#2B4A9C" 
-                          stroke-width="6"/>
-                </svg>
-            </div>
-            <h1>
-                <span class="brand-name">Good<span class="yellow">Neybr</span></span> Tasks
-            </h1>
-        </div>
-        
-        <!-- Authentication Section -->
-        <div id="auth-section" class="auth-container">
-            <div class="auth-form">
-                <h3>Sign In / Sign Up</h3>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" placeholder="your@email.com">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo">
+                    <svg class="logo-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- House outline -->
+                        <path d="M80 200 L200 80 L320 200 L320 340 L80 340 Z" 
+                              fill="#1E3A8A" 
+                              stroke="#1E40AF" 
+                              stroke-width="12" 
+                              stroke-linejoin="round"/>
+                        
+                        <!-- Heart shape -->
+                        <path d="M200 300 C 170 270, 140 240, 140 210 C 140 190, 155 175, 175 175 C 185 175, 195 180, 200 190 C 205 180, 215 175, 225 175 C 245 175, 260 190, 260 210 C 260 240, 230 270, 200 300 Z" 
+                              fill="#F59E0B" 
+                              stroke="#1E3A8A" 
+                              stroke-width="4"/>
+                    </svg>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" placeholder="Your password">
+                <div class="brand-container">
+                    <div class="brand-name">Good<span class="yellow">Neybr</span></div>
+                    <div class="brand-slogan">For neighbors. By neighbors.</div>
                 </div>
-                <button class="btn" onclick="signUp()">Sign Up</button>
-                <button class="btn btn-secondary" onclick="signIn()">Sign In</button>
             </div>
-            <div id="auth-message"></div>
-        </div>
-
-        <!-- App Section -->
-        <div id="app-section" style="display: none;">
-            <div class="user-info">
-                <div>
+            
+            <!-- Authentication Section -->
+            <div class="auth-section">
+                <div id="auth-form" class="auth-form">
+                    <input type="email" id="email" class="auth-input" placeholder="Email">
+                    <input type="password" id="password" class="auth-input" placeholder="Password">
+                    <button class="btn" onclick="signUp()">Sign Up</button>
+                    <button class="btn btn-secondary" onclick="signIn()">Sign In</button>
+                </div>
+                <div id="user-info" class="user-info" style="display: none;">
                     <span id="user-email"></span>
                     <span id="realtime-status" class="realtime-status" title="Real-time connection active"></span>
+                    <button class="btn" onclick="signOut()">Sign Out</button>
                 </div>
-                <button class="btn btn-secondary" onclick="signOut()">Sign Out</button>
             </div>
+        </div>
+        <div id="auth-message" style="text-align: center; padding: 10px;"></div>
+    </header>
 
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Boston Home Services Made Simple</h1>
+                <p class="hero-subtitle">Connect with trusted local providers for your home and HOA needs</p>
+                <button class="cta-button">Get Started</button>
+            </div>
+        </section>
+
+        <!-- What We Do Section -->
+        <section class="content-section what-we-do">
+            <div class="content-container">
+                <h2 class="section-title">What We Do</h2>
+                <div class="section-content">
+                    <p><strong>GoodNeybr</strong> is a platform that connects Boston homeowners and HOAs with trusted local home service providers. Our goal is to make property management simpler, more transparent, and more cost-effective.</p>
+                    
+                    <p>Whether you're managing an entire building or just need help with a one-off project in your unit, GoodNeybr gives you the tools to take control. For HOAs, we offer a centralized hub to manage vendors, track payments, organize condo documents, and oversee treasury services — all in one place.</p>
+                    
+                    <p>Need to paint a bedroom, fix a leak, or replace an appliance in your unit? GoodNeybr is your one-stop shop. We collect quotes from qualified vendors in your area, compare options based on price and quality, and help you make informed decisions. Once you've selected a vendor, we'll manage scheduling and payments to keep things seamless and stress-free.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who We Are Section -->
+        <section class="content-section who-we-are">
+            <div class="content-container">
+                <h2 class="section-title">Who We Are</h2>
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 50px; align-items: center;">
+                    <div class="section-content">
+                        <p>Hi — we're <strong>Mara and Tim</strong> (and Goose!), the founders of GoodNeybr. We live in Boston and created this platform after running into the same frustrations many condo owners face. We were paying hundreds of dollars in monthly HOA fees without feeling like we were getting our money's worth.</p>
+                        
+                        <p>We built GoodNeybr to give our neighbors a better alternative — one that's more transparent, competitive, and local. Along the way, we discovered a lot of fantastic service providers in the Boston area — but finding them took way too much digging. We want to make it easier for others to find, hire, and support the best vendors in the neighborhood.</p>
+                    </div>
+                    <div class="founders-image">
+                        <p>Mara, Tim & Goose<br>Photo Coming Soon!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Task Manager Section (Only visible when logged in) -->
+        <div id="task-manager" class="task-manager" style="display: none;">
+            <h2 style="text-align: center; color: #2B4A9C; margin-bottom: 30px;">Your Tasks</h2>
+            
             <div class="task-input">
                 <input type="text" id="new-task" placeholder="Add a new task..." onkeypress="handleKeyPress(event)">
                 <button class="btn" onclick="addTask()">Add Task</button>
@@ -395,7 +608,15 @@
                 <div class="loading">Loading tasks...</div>
             </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="content-container">
+            <h2 class="contact-title">Questions or Comments?</h2>
+            <p>Please email <a href="mailto:tpgallag4@gmail.com" class="contact-email">tpgallag4@gmail.com</a></p>
+        </div>
+    </section>
 
     <script>
         // Your Supabase credentials
@@ -428,10 +649,34 @@
             const { data: { user } } = await supabaseClient.auth.getUser()
             if (user) {
                 currentUser = user
-                showApp()
+                showUserInfo()
+                showTaskManager()
                 loadTasks()
                 setupRealtime()
             }
+        }
+
+        // Show user info in header
+        function showUserInfo() {
+            document.getElementById('auth-form').style.display = 'none'
+            document.getElementById('user-info').style.display = 'flex'
+            document.getElementById('user-email').textContent = currentUser.email
+        }
+
+        // Show auth form in header
+        function showAuthForm() {
+            document.getElementById('auth-form').style.display = 'flex'
+            document.getElementById('user-info').style.display = 'none'
+        }
+
+        // Show task manager
+        function showTaskManager() {
+            document.getElementById('task-manager').style.display = 'block'
+        }
+
+        // Hide task manager
+        function hideTaskManager() {
+            document.getElementById('task-manager').style.display = 'none'
         }
 
         // Setup real-time subscription
@@ -469,19 +714,16 @@
 
             switch (eventType) {
                 case 'INSERT':
-                    // New task added
                     if (newRecord.user_id === currentUser.id) {
                         addTaskToUI(newRecord, true)
                     }
                     break
                 case 'UPDATE':
-                    // Task updated
                     if (newRecord.user_id === currentUser.id) {
                         updateTaskInUI(newRecord)
                     }
                     break
                 case 'DELETE':
-                    // Task deleted
                     if (oldRecord.user_id === currentUser.id) {
                         removeTaskFromUI(oldRecord.id)
                     }
@@ -579,9 +821,13 @@
                 showMessage('Error: ' + error.message, 'error')
             } else {
                 currentUser = data.user
-                showApp()
+                showUserInfo()
+                showTaskManager()
                 loadTasks()
                 setupRealtime()
+                // Clear input fields
+                document.getElementById('email').value = ''
+                document.getElementById('password').value = ''
             }
         }
 
@@ -595,27 +841,15 @@
             if (!error) {
                 currentUser = null
                 currentTasks = []
-                showAuth()
+                showAuthForm()
+                hideTaskManager()
             }
-        }
-
-        // Show authentication section
-        function showAuth() {
-            document.getElementById('auth-section').style.display = 'block'
-            document.getElementById('app-section').style.display = 'none'
-        }
-
-        // Show main app section
-        function showApp() {
-            document.getElementById('auth-section').style.display = 'none'
-            document.getElementById('app-section').style.display = 'block'
-            document.getElementById('user-email').textContent = currentUser.email
         }
 
         // Show message to user
         function showMessage(message, type) {
             const messageDiv = document.getElementById('auth-message')
-            messageDiv.innerHTML = `<div class="${type}">${message}</div>`
+            messageDiv.innerHTML = `<div class="${type}" style="padding: 10px; margin: 10px 0; border-radius: 5px; ${type === 'error' ? 'background: #FEE2E2; color: #DC2626; border: 1px solid #FCA5A5;' : 'background: #D1FAE5; color: #059669; border: 1px solid #6EE7B7;'}">${message}</div>`
             setTimeout(() => messageDiv.innerHTML = '', 5000)
         }
 
@@ -634,23 +868,25 @@
                 .insert([
                     {
                         text: taskText,
-                        completed: false,
-                        user_id: currentUser.id
+                        user_id: currentUser.id,
+                        completed: false
                     }
                 ])
 
             if (error) {
                 console.error('Error adding task:', error)
-                alert('Error adding task: ' + error.message)
+                alert('Error adding task')
             } else {
                 taskInput.value = ''
-                // Don't reload tasks - real-time will handle it
             }
         }
 
-        // Load all tasks for current user
+        // Load tasks from database
         async function loadTasks() {
-            const { data: tasks, error } = await supabaseClient
+            const tasksContainer = document.getElementById('tasks-container')
+            tasksContainer.innerHTML = '<div class="loading">Loading tasks...</div>'
+
+            const { data, error } = await supabaseClient
                 .from('tasks')
                 .select('*')
                 .eq('user_id', currentUser.id)
@@ -658,42 +894,30 @@
 
             if (error) {
                 console.error('Error loading tasks:', error)
-                document.getElementById('tasks-container').innerHTML = '<div class="error">Error loading tasks</div>'
-                return
+                tasksContainer.innerHTML = '<div class="error">Error loading tasks</div>'
+            } else {
+                currentTasks = data || []
+                displayTasks(currentTasks)
             }
-
-            currentTasks = tasks || []
-            displayTasks(currentTasks)
         }
 
-        // Display tasks in the UI
+        // Display tasks in UI
         function displayTasks(tasks, newTaskId = null, updatedTaskId = null) {
-            const container = document.getElementById('tasks-container')
+            const tasksContainer = document.getElementById('tasks-container')
             
             if (tasks.length === 0) {
-                container.innerHTML = '<div class="loading">No tasks yet. Add one above!</div>'
+                tasksContainer.innerHTML = '<div style="text-align: center; color: #6B7280; padding: 20px;">No tasks yet. Add your first task above!</div>'
                 return
             }
 
-            container.innerHTML = tasks.map(task => {
-                let animationClass = ''
-                if (newTaskId && task.id === newTaskId) {
-                    animationClass = 'new-task'
-                } else if (updatedTaskId && task.id === updatedTaskId) {
-                    animationClass = 'updated-task'
-                }
-                
-                return `
-                    <div class="task ${task.completed ? 'completed' : ''} ${animationClass}">
-                        <input type="checkbox" class="task-checkbox" 
-                               ${task.completed ? 'checked' : ''} 
-                               onchange="toggleTask(${task.id}, ${!task.completed})">
-                        <span class="task-text">${task.text}</span>
-                        <span class="task-date">${new Date(task.created_at).toLocaleDateString()}</span>
-                        <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
-                    </div>
-                `
-            }).join('')
+            tasksContainer.innerHTML = tasks.map(task => `
+                <div class="task ${task.completed ? 'completed' : ''} ${newTaskId === task.id ? 'new-task' : ''} ${updatedTaskId === task.id ? 'updated-task' : ''}" data-task-id="${task.id}">
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id}, this.checked)">
+                    <span class="task-text">${task.text}</span>
+                    <span class="task-date">${new Date(task.created_at).toLocaleDateString()}</span>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">Delete</button>
+                </div>
+            `).join('')
         }
 
         // Toggle task completion
@@ -707,7 +931,6 @@
                 console.error('Error updating task:', error)
                 alert('Error updating task')
             }
-            // Don't reload tasks - real-time will handle it
         }
 
         // Delete task
@@ -725,7 +948,6 @@
                 console.error('Error deleting task:', error)
                 alert('Error deleting task')
             }
-            // Don't reload tasks - real-time will handle it
         }
 
         // Handle Enter key press in task input
@@ -735,7 +957,7 @@
             }
         }
 
-        // Initialize app
+        // Initialize when page loads
         window.addEventListener('load', initializeSupabase)
     </script>
 </body>
