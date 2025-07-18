@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard - GoodNeybr</title>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 40%, #60A5FA 100%);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .logo-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .brand-name .yellow {
+            color: #F59E0B;
+        }
+
+        .brand-slogan {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 500;
+            font-style: italic;
+            letter-spacing: 0.5px;
+            margin-top: -2px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+        }
+
+        .welcome-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: #FFD700;
+            color: #1E3A8A;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 215, 0, 0.4);
+            background: #F59E0B;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #FFD700 0%, #F59E0B 100%);
+            color: #1E3A8A;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(43, 74, 156, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(43, 74, 156, 0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3B82F6, #1E40AF);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2B4A9C;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            color: #6B7280;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .card-button {
+            background: linear-gradient(45deg, #FFD700, #F59E0B);
+            color: #1E3A8A;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .card-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .plan-info {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(43, 74, 156, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .plan-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2B4A9C;
+        }
+
+        .plan-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6B7280;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo-section" style="text-decoration: none;">
+                <div class="logo">
+                    <svg class="logo-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <!-- House outline -->
+                        <path d="M80 200 L200 80 L320 200 L320 340 L80 340 Z" 
+                              fill="#F59E0B" 
+                              stroke="#FFD700" 
+                              stroke-width="12" 
+                              stroke-linejoin="round"/>
+                        
+                        <!-- Heart shape -->
+                        <path d="M200 300 C 170 270, 140 240, 140 210 C 140 190, 155 175, 175 175 C 185 175, 195 180, 200 190 C 205 180, 215 175, 225 175 C 245 175, 260 190, 260 210 C 260 240, 230 270, 200 300 Z" 
+                              fill="#1E3A8A" 
+                              stroke="#3B82F6" 
+                              stroke-width="4"/>
+                    </svg>
+                </div>
+                <div class="brand-container">
+                    <div class="brand-name">Good<span class="yellow">Neybr</span></div>
+                    <div class="brand-slogan">For neighbors. By neighbors.</div>
+                </div>
+            </a>
+            
+            <div class="user-info">
+                <span class="welcome-text">Welcome, <span id="user-name">Member</span>!</span>
+                <button class="btn" onclick="signOut()">Sign Out</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div id="loading" class="loading">Loading your dashboard...</div>
+        
+        <div id="dashboard-content" style="display: none;">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <h1 class="welcome-title">🎉 Welcome to GoodNeybr!</h1>
+                <p class="welcome-subtitle">Your account is confirmed and ready to go. Let's get started!</p>
+            </div>
+
+            <!-- Current Plan Info -->
+            <div class="plan-info">
+                <div class="plan-header">
+                    <div>
+                        <div class="plan-title" id="current-plan">Your Current Plan</div>
+                        <p style="color: #6B7280; margin-top: 5px;">Manage your subscription and billing</p>
+                    </div>
+                    <div class="plan-price" id="plan-price">$0/month</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-grid">
+                <!-- Request Quote Card -->
+                <div class="dashboard-card">
+                    <div class="card-icon">📝</div>
+                    <h3 class="card-title">Request Quotes</h3>
+                    <p class="card-description">Get quotes from trusted local service providers for your home projects.</p>
+                    <a href="#" class="card-button">Get Started</a>
+                </div>
+
+                <!-- Find Vendors Card -->
+                <div class="dashboard-card">
+                    <div class="card-icon">🔍</div>
+                    <h3 class="card-title">Find Vendors</h3>
+                    <p class="card-description">Browse our network of vetted local service providers in the Boston area.</p>
+                    <a href="#" class="card-button">Browse Vendors</a>
+                </div>
+
+                <!-- My Projects Card -->
+                <div class="dashboard-card">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">My Projects</h3>
+                    <p class="card-description">Track your ongoing projects and view project history.</p>
+                    <a href="#" class="card-button">View Projects</a>
+                </div>
+
+                <!-- Account Settings Card -->
+                <div class="dashboard-card">
+                    <div class="card-icon">⚙️</div>
+                    <h3 class="card-title">Account Settings</h3>
+                    <p class="card-description">Update your profile, preferences, and billing information.</p>
+                    <a href="#" class="card-button">Manage Account</a>
+                </div>
+
+                <!-- HOA Management Card (conditional) -->
+                <div class="dashboard-card" id="hoa-card" style="display: none;">
+                    <div class="card-icon">🏢</div>
+                    <h3 class="card-title">HOA Management</h3>
+                    <p class="card-description">Access your HOA dashboard with document storage and treasury tools.</p>
+                    <a href="#" class="card-button">HOA Dashboard</a>
+                </div>
+
+                <!-- Support Card -->
+                <div class="dashboard-card">
+                    <div class="card-icon">💬</div>
+                    <h3 class="card-title">Help & Support</h3>
+                    <p class="card-description">Get help with your account or contact our support team.</p>
+                    <a href="mailto:tpgallag4@gmail.com" class="card-button">Contact Support</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://lqlwcvufmzewjjtzhwip.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxxbHdjdnVmbXpld2pqdHpod2lwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2OTA0NTcsImV4cCI6MjA2ODI2NjQ1N30.s_BZA5LHqUiLlQ-6writsifkc9bG9mWe8zEkzn8XnG0'
+        
+        let supabaseClient = null
+        let currentUser = null
+        
+        // Plan information
+        const planInfo = {
+            'individual': { name: 'Individual Homeowner', price: 9 },
+            'hoa-basic': { name: 'HOA – Basic Support', price: 49 },
+            'hoa-premium': { name: 'HOA – Premium Support', price: 99 }
+        }
+        
+        // Initialize Supabase
+        function initializeSupabase() {
+            if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+                checkUser()
+            } else {
+                setTimeout(initializeSupabase, 100)
+            }
+        }
+        
+        // Check if user is logged in and load their data
+        async function checkUser() {
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser()
+                
+                if (!user) {
+                    // Redirect to login if not authenticated
+                    window.location.href = 'index.html'
+                    return
+                }
+                
+                currentUser = user
+                await loadUserProfile()
+                
+            } catch (error) {
+                console.error('Error checking user:', error)
+                window.location.href = 'index.html'
+            }
+        }
+        
+        // Load user profile and display dashboard
+        async function loadUserProfile() {
+            try {
+                const { data: profile, error } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single()
+                
+                if (error) {
+                    console.error('Error loading profile:', error)
+                    return
+                }
+                
+                // Update UI with user data
+                document.getElementById('user-name').textContent = profile.first_name || 'Member'
+                
+                // Update plan information
+                const plan = planInfo[profile.plan_type] || { name: 'No Plan Selected', price: 0 }
+                document.getElementById('current-plan').textContent = plan.name
+                document.getElementById('plan-price').textContent = `$${plan.price}/month`
+                
+                // Show HOA card for HOA plans
+                if (profile.plan_type === 'hoa-basic' || profile.plan_type === 'hoa-premium') {
+                    document.getElementById('hoa-card').style.display = 'block'
+                }
+                
+                // Hide loading and show dashboard
+                document.getElementById('loading').style.display = 'none'
+                document.getElementById('dashboard-content').style.display = 'block'
+                
+            } catch (error) {
+                console.error('Error loading user profile:', error)
+                document.getElementById('loading').innerHTML = '<p style="color: #DC2626;">Error loading dashboard. Please try refreshing the page.</p>'
+            }
+        }
+        
+        // Sign out user
+        async function signOut() {
+            const { error } = await supabaseClient.auth.signOut()
+            if (!error) {
+                window.location.href = 'index.html'
+            }
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', initializeSupabase)
+    </script>
+</body>
+</html>
