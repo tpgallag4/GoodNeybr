@@ -120,7 +120,7 @@
 
         .plans-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
             margin-bottom: 40px;
         }
@@ -264,7 +264,7 @@
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .plans-container {
                 grid-template-columns: 1fr;
             }
@@ -382,8 +382,8 @@
             
             <div class="loading" id="loading">Creating your account...</div>
             
-            <button class="continue-btn" id="continue-btn" disabled onclick="createAccount()">
-                Create Account
+            <button class="continue-btn" id="continue-btn" disabled onclick="proceedToPayment()">
+                Continue to Payment
             </button>
         </div>
     </main>
@@ -433,70 +433,23 @@
             document.getElementById('continue-btn').disabled = false
         }
         
-        // Create account with selected plan
-        async function createAccount() {
+        // Proceed to payment page
+        function proceedToPayment() {
             if (!selectedPlan || !signupData) {
                 alert('Please select a plan and try again')
                 return
             }
             
-            const continueBtn = document.getElementById('continue-btn')
-            const loading = document.getElementById('loading')
-            
-            // Show loading state
-            continueBtn.disabled = true
-            loading.style.display = 'block'
-            
-            try {
-                // Create user account
-                const { data: authData, error: authError } = await supabaseClient.auth.signUp({
-                    email: signupData.email,
-                    password: signupData.password
-                })
-                
-                if (authError) {
-                    throw authError
-                }
-                
-                // Save user profile with selected plan
-                if (authData.user) {
-                    const { error: profileError } = await supabaseClient
-                        .from('profiles')
-                        .insert([{
-                            id: authData.user.id,
-                            first_name: signupData.firstName,
-                            last_name: signupData.lastName,
-                            email: signupData.email,
-                            street: signupData.street,
-                            unit: signupData.unit || null,
-                            city: signupData.city,
-                            state: signupData.state,
-                            zip_code: signupData.zipCode,
-                            plan_type: selectedPlan
-                        }])
-                    
-                    if (profileError) {
-                        console.error('Profile creation error:', profileError)
-                        // Don't throw here - account was created successfully
-                    }
-                }
-                
-                // Clear stored data
-                sessionStorage.removeItem('signupData')
-                
-                // Show success message
-                document.getElementById('success-message').style.display = 'block'
-                document.querySelector('.plans-container').style.display = 'none'
-                continueBtn.style.display = 'none'
-                
-            } catch (error) {
-                console.error('Account creation error:', error)
-                alert('Error creating account: ' + error.message)
-            } finally {
-                // Hide loading state
-                continueBtn.disabled = false
-                loading.style.display = 'none'
+            // Store selected plan with signup data
+            const completeData = {
+                ...signupData,
+                selectedPlan: selectedPlan
             }
+            
+            sessionStorage.setItem('signupData', JSON.stringify(completeData))
+            
+            // Redirect to payment page
+            window.location.href = 'payment.html'
         }
         
         // Initialize when page loads
