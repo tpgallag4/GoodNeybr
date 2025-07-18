@@ -327,33 +327,43 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="address" class="form-label">Address</label>
+                    <label for="street" class="form-label">Street Address</label>
                     <div class="address-input">
-                        <input type="text" id="address" name="address" class="form-input" 
-                               placeholder="Start typing your address..." required>
+                        <input type="text" id="street" name="street" class="form-input" 
+                               placeholder="Start typing your street address..." required>
                         <div class="address-suggestions" id="address-suggestions"></div>
                     </div>
-                    <div class="error-message" id="address-error"></div>
+                    <div class="error-message" id="street-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="unit" class="form-label">Unit/Apt # (Optional)</label>
+                    <input type="text" id="unit" name="unit" class="form-input" placeholder="Unit, Apt, or Suite number">
+                    <div class="error-message" id="unit-error"></div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="city" class="form-label">City</label>
-                        <input type="text" id="city" name="city" class="form-input" required>
+                        <input type="text" id="city" name="city" class="form-input" required readonly>
                         <div class="error-message" id="city-error"></div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="zipCode" class="form-label">Zip Code</label>
-                        <input type="text" id="zipCode" name="zipCode" class="form-input" 
-                               pattern="[0-9]{5}" maxlength="5" required>
-                        <div class="error-message" id="zipCode-error"></div>
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" id="state" name="state" class="form-input" value="MA" required readonly>
+                        <div class="error-message" id="state-error"></div>
                     </div>
                 </div>
                 
-                <div class="loading" id="loading">Creating your account...</div>
+                <div class="form-group">
+                    <label for="zipCode" class="form-label">Zip Code</label>
+                    <input type="text" id="zipCode" name="zipCode" class="form-input" 
+                           pattern="[0-9]{5}" maxlength="5" required readonly>
+                    <div class="error-message" id="zipCode-error"></div>
+                </div>
                 
-                <button type="submit" class="submit-btn" id="submit-btn">
+                <div class="loading" id="loading">Creating your account...</div>
                     Create Account
                 </button>
             </form>
@@ -380,10 +390,10 @@
         let addressTimeout = null
         
         function setupAddressAutocomplete() {
-            const addressInput = document.getElementById('address')
+            const streetInput = document.getElementById('street')
             const suggestionsDiv = document.getElementById('address-suggestions')
             
-            addressInput.addEventListener('input', function() {
+            streetInput.addEventListener('input', function() {
                 const query = this.value.trim()
                 
                 if (query.length < 3) {
@@ -439,23 +449,33 @@
             const suggestionsDiv = document.getElementById('address-suggestions')
             
             suggestionsDiv.innerHTML = results.map(result => {
-                const address = result.display_name
-                return `<div class="address-suggestion" onclick="selectAddress('${address}', '${result.address?.city || 'Boston'}', '${result.address?.postcode || ''}')">${address}</div>`
+                const addr = result.address || {}
+                const streetNumber = addr.house_number || ''
+                const streetName = addr.road || ''
+                const fullStreet = `${streetNumber} ${streetName}`.trim()
+                const city = addr.city || addr.town || addr.village || 'Boston'
+                const state = addr.state || 'MA'
+                const zipCode = addr.postcode || ''
+                
+                const displayText = `${fullStreet}, ${city}, ${state} ${zipCode}`
+                
+                return `<div class="address-suggestion" onclick="selectAddress('${fullStreet}', '${city}', '${state}', '${zipCode}')">${displayText}</div>`
             }).join('')
             
             suggestionsDiv.style.display = 'block'
         }
         
-        function selectAddress(fullAddress, city, zipCode) {
-            document.getElementById('address').value = fullAddress
+        function selectAddress(street, city, state, zipCode) {
+            document.getElementById('street').value = street
             document.getElementById('city').value = city
+            document.getElementById('state').value = state
             document.getElementById('zipCode').value = zipCode
             document.getElementById('address-suggestions').style.display = 'none'
         }
         
         // Form validation
         function validateForm() {
-            const fields = ['firstName', 'lastName', 'email', 'password', 'address', 'city', 'zipCode']
+            const fields = ['firstName', 'lastName', 'email', 'password', 'street', 'city', 'state', 'zipCode']
             let isValid = true
             
             fields.forEach(field => {
@@ -536,10 +556,11 @@
                             first_name: userData.firstName,
                             last_name: userData.lastName,
                             email: userData.email,
-                            address: userData.address,
+                            street: userData.street,
+                            unit: userData.unit || null,
                             city: userData.city,
-                            zip_code: userData.zipCode,
-                            state: 'MA' // Default to Massachusetts for Boston
+                            state: userData.state,
+                            zip_code: userData.zipCode
                         }])
                     
                     if (profileError) {
