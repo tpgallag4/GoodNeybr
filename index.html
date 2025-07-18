@@ -168,10 +168,10 @@
         }
 
         .hero-section {
-            /* Using your renamed Supabase image with white overlay for readability */
+            /* Using your renamed Supabase image with stronger white overlay for better readability */
             background-color: #2563EB;
             background-image: 
-                linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2)),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.5)),
                 url('https://lqlwcvufmzewjjtzhwip.supabase.co/storage/v1/object/public/images/backbay.jpg');
             background-size: cover;
             background-position: center;
@@ -191,14 +191,16 @@
             font-size: 3.5rem;
             font-weight: 700;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+            text-shadow: 2px 2px 12px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.5);
+            color: #1E3A8A;
         }
 
         .hero-subtitle {
             font-size: 1.3rem;
             margin-bottom: 40px;
             opacity: 0.95;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+            text-shadow: 1px 1px 8px rgba(0,0,0,0.8), 0 0 15px rgba(0,0,0,0.5);
+            color: #374151;
         }
 
         .cta-button {
@@ -444,7 +446,67 @@
             margin: 10px 0;
         }
 
-        /* Animations */
+        /* Scroll Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s ease-out;
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Parallax effect for hero */
+        .hero-section {
+            /* Using your renamed Supabase image with stronger white overlay for better readability */
+            background-color: #2563EB;
+            background-image: 
+                linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.5)),
+                url('https://lqlwcvufmzewjjtzhwip.supabase.co/storage/v1/object/public/images/backbay.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            min-height: 500px;
+        }
         @keyframes pulse {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -561,17 +623,17 @@
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="hero-content">
-                <h1 class="hero-title">Boston Home Services Made Simple</h1>
-                <p class="hero-subtitle">Connect with trusted local providers for your home and HOA needs</p>
-                <button class="cta-button">Get Started</button>
+                <h1 class="hero-title fade-in">Boston Home Services Made Simple</h1>
+                <p class="hero-subtitle fade-in">Connect with trusted local providers for your home and HOA needs</p>
+                <button class="cta-button scale-in">Get Started</button>
             </div>
         </section>
 
         <!-- What We Do Section -->
         <section class="content-section what-we-do">
             <div class="content-container">
-                <h2 class="section-title">What We Do</h2>
-                <div class="section-content">
+                <h2 class="section-title fade-in">What We Do</h2>
+                <div class="section-content slide-in-left">
                     <p><strong>GoodNeybr</strong> is a platform that connects Boston homeowners and HOAs with trusted local home service providers. Our goal is to make property management simpler, more transparent, and more cost-effective.</p>
                     
                     <p>Whether you're managing an entire building or just need help with a one-off project in your unit, GoodNeybr gives you the tools to take control. For HOAs, we offer a centralized hub to manage vendors, track payments, organize condo documents, and oversee treasury services — all in one place.</p>
@@ -584,14 +646,14 @@
         <!-- Who We Are Section -->
         <section class="content-section who-we-are">
             <div class="content-container">
-                <h2 class="section-title">Who We Are</h2>
+                <h2 class="section-title fade-in">Who We Are</h2>
                 <div style="display: grid; grid-template-columns: 1fr 300px; gap: 50px; align-items: center;">
-                    <div class="section-content">
+                    <div class="section-content slide-in-left">
                         <p>Hi — we're <strong>Mara and Tim</strong> (and Goose!), the founders of GoodNeybr. We live in Boston and created this platform after running into the same frustrations many condo owners face. We were paying hundreds of dollars in monthly HOA fees without feeling like we were getting our money's worth.</p>
                         
                         <p>We built GoodNeybr to give our neighbors a better alternative — one that's more transparent, competitive, and local. Along the way, we discovered a lot of fantastic service providers in the Boston area — but finding them took way too much digging. We want to make it easier for others to find, hire, and support the best vendors in the neighborhood.</p>
                     </div>
-                    <div class="founders-image">
+                    <div class="founders-image slide-in-right">
                         <p>Mara, Tim & Goose<br>Photo Coming Soon!</p>
                     </div>
                 </div>
@@ -961,7 +1023,35 @@
         }
 
         // Initialize when page loads
-        window.addEventListener('load', initializeSupabase)
+        window.addEventListener('load', () => {
+            initializeSupabase()
+            initializeScrollAnimations()
+        })
+
+        // Scroll Animations
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible')
+                    }
+                })
+            }, observerOptions)
+
+            // Observe all animation elements
+            const animatedElements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in')
+            animatedElements.forEach(el => observer.observe(el))
+
+            // Add staggered animation delays
+            document.querySelectorAll('.fade-in').forEach((el, index) => {
+                el.style.transitionDelay = `${index * 0.2}s`
+            })
+        }
     </script>
 </body>
 </html>
